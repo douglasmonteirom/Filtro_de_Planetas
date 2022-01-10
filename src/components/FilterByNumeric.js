@@ -23,7 +23,11 @@ export default function FilterByNumeric() {
   function applyFilters() {
     const dataForFilter = data;
     // aplicar filtros existentes menos o excluido
-    const newArray = filters.map((filter, index) => verifyComparison(filters[filters.lenght - (index + 1)], dataForFilter));
+    const newArray = filters.map(
+      (filter, index) => verifyComparison(
+        filters[filters.lenght - (index + 1)], dataForFilter,
+      ),
+    );
     console.log(newArray);
   }
 
@@ -32,7 +36,9 @@ export default function FilterByNumeric() {
     setFilterByNumericValues(newArray);
     setOptionsFilter([...optionsFilter, value]);
     applyFilters();
-    setDataLocal(verifyComparison((filters.lenght) ? filters[filters.lenght - 1] : {}, data));
+    setDataLocal(verifyComparison(
+      (filters.lenght) ? (filters[filters.lenght - 1], data) : ({}, data),
+    ));
   }
 
   return (
