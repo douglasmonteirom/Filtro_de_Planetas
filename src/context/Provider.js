@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+// import testData from '../testData';
 import MyContext from './ContextAPI';
 
 const filterOptions = [
@@ -17,6 +18,17 @@ function Provider({ children }) {
   const [optionsFilter, setOptionsFilter] = useState(filterOptions);
   const [dataLocal, setDataLocal] = useState([]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await fetch('https://swapi-trybe.herokuapp.com/api/planets/')
+        .then((response) => response.json())
+        .then((response) => response);
+      setData(result.results);
+      setDataLocal(result.results);
+    };
+    fetchData();
+  }, [setData, setDataLocal]);
+
   function verifyComparison({ column, comparison, value }, planets) {
     switch (comparison) {
     case 'maior que':
@@ -26,7 +38,7 @@ function Provider({ children }) {
 
     case 'menor que':
       return planets.filter(
-        (planet) => planet[column] <= value,
+        (planet) => planet[column] < Number(value),
       );
 
     case 'igual a':
@@ -35,9 +47,30 @@ function Provider({ children }) {
       );
 
     default:
-      return planets;
+      return data;
     }
   }
+
+  // function compare(a, b) {
+  //   if (a.name < b.name) {
+  //     return -1;
+  //   }
+  //   if (a.name > b.name) {
+  //     return 1;
+  //   }
+  //   return 0;
+  // }
+
+  // function orderBy({ column, sort }, dataInitial) {
+  //   switch (sort) {
+  //   case 'ASC':
+  //     return dataInitial.sort(compare);
+  //   case 'DESC':
+  //     return dataInitial.sort(compare).reverse();
+  //   default:
+  //     return dataInitial;
+  //   }
+  // }
 
   const ObjValue = {
     data,

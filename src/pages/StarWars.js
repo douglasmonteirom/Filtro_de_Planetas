@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import Table from '../components/Table';
 import MyContext from '../context/ContextAPI';
 import FilterByNumeric from '../components/FilterByNumeric';
@@ -25,7 +25,6 @@ function renderHeaderTable() {
 
 export default function StarWars() {
   const {
-    setData,
     optionsFilter,
     setOptionsFilter,
     filterByName,
@@ -36,23 +35,13 @@ export default function StarWars() {
     setDataLocal,
     verifyComparison,
   } = useContext(MyContext);
+
   const defaultComparison = {
     column: optionsFilter[0],
     comparison: 'maior que',
     value: 0,
   };
   const [currencyNumericValues, setCurencyNumericValues] = useState(defaultComparison);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await fetch('https://swapi-trybe.herokuapp.com/api/planets/')
-        .then((response) => response.json())
-        .then((response) => response);
-      setData(result.results);
-      setDataLocal(result.results);
-    };
-    fetchData();
-  }, [setData, setDataLocal]);
 
   function onChangeFilterByName({ target }) {
     setFilterByName({ name: target.value });

@@ -21,14 +21,15 @@ export default function FilterByNumeric() {
   }, [filterByNumericValues, setfilters]);
 
   function applyFilters() {
-    const dataForFilter = data;
-    // aplicar filtros existentes menos o excluido
-    const newArray = filters.map(
-      (filter, index) => verifyComparison(
-        filters[filters.lenght - (index + 1)], dataForFilter,
-      ),
-    );
-    console.log(newArray);
+    if (filters.length === 1) {
+      setDataLocal(data);
+    } else {
+      let dataForFilter = data;
+      for (let index = 0; index < filters.length - 1; index += 1) {
+        dataForFilter = verifyComparison(filters[index], dataForFilter);
+      }
+      setDataLocal(dataForFilter);
+    }
   }
 
   function onClick(value) {
@@ -36,9 +37,6 @@ export default function FilterByNumeric() {
     setFilterByNumericValues(newArray);
     setOptionsFilter([...optionsFilter, value]);
     applyFilters();
-    setDataLocal(verifyComparison(
-      (filters.lenght) ? (filters[filters.lenght - 1], data) : ({}, data),
-    ));
   }
 
   return (
