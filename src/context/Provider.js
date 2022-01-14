@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
-// import testData from '../testData';
+import React, { useState } from 'react';
 import MyContext from './ContextAPI';
 
 const filterOptions = [
@@ -11,23 +10,59 @@ const filterOptions = [
   'surface_water',
 ];
 
+const VALUE_COMPARE = -1;
+
+const defaultOrder = { column: 'population', sort: 'ASC' };
+
 function Provider({ children }) {
   const [data, setData] = useState([]);
   const [filterByName, setFilterByName] = useState({ name: '' });
   const [filterByNumericValues, setFilterByNumericValues] = useState([]);
   const [optionsFilter, setOptionsFilter] = useState(filterOptions);
   const [dataLocal, setDataLocal] = useState([]);
+  const [orderValue, setOrderValue] = useState(defaultOrder);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await fetch('https://swapi-trybe.herokuapp.com/api/planets/')
-        .then((response) => response.json())
-        .then((response) => response);
-      setData(result.results);
-      setDataLocal(result.results);
-    };
-    fetchData();
-  }, [setData, setDataLocal]);
+  function compareValue(a, b) {
+    if (Number(a[orderValue.column]) < Number(b[orderValue.column])) {
+      return VALUE_COMPARE;
+    }
+    if (Number(a[orderValue.column]) > Number(b[orderValue.column])) {
+      return 1;
+    }
+    return 0;
+  }
+
+  function compareName(a, b) {
+    if (a.name < b.name) {
+      return VALUE_COMPARE;
+    }
+    if (a.name > b.name) {
+      return 1;
+    }
+    return 0;
+  }
+
+  function orderByname({ sort }, dataInitial) {
+    switch (sort) {
+    case 'ASC':
+      return dataInitial.sort(compareName);
+    case 'DESC':
+      return dataInitial.sort(compareName).reverse();
+    default:
+      return dataInitial;
+    }
+  }
+
+  function order({ sort }, dataInitial) {
+    switch (sort) {
+    case 'ASC':
+      return [...dataInitial].sort(compareValue);
+    case 'DESC':
+      return [...dataInitial].sort(compareValue).reverse();
+    default:
+      return dataInitial;
+    }
+  }
 
   function verifyComparison({ column, comparison, value }, planets) {
     switch (comparison) {
@@ -51,27 +86,6 @@ function Provider({ children }) {
     }
   }
 
-  // function compare(a, b) {
-  //   if (a.name < b.name) {
-  //     return -1;
-  //   }
-  //   if (a.name > b.name) {
-  //     return 1;
-  //   }
-  //   return 0;
-  // }
-
-  // function orderBy({ column, sort }, dataInitial) {
-  //   switch (sort) {
-  //   case 'ASC':
-  //     return dataInitial.sort(compare);
-  //   case 'DESC':
-  //     return dataInitial.sort(compare).reverse();
-  //   default:
-  //     return dataInitial;
-  //   }
-  // }
-
   const ObjValue = {
     data,
     setData,
@@ -84,6 +98,11 @@ function Provider({ children }) {
     dataLocal,
     setDataLocal,
     verifyComparison,
+    filterOptions,
+    orderValue,
+    setOrderValue,
+    order,
+    orderByname,
   };
 
   return (

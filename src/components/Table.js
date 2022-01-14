@@ -3,7 +3,10 @@ import MyContext from '../context/ContextAPI';
 
 export default function Table() {
   const [planets, setPlanets] = useState([]);
-  const { dataLocal, filterByName } = useContext(MyContext);
+  const {
+    filterByName,
+    dataLocal,
+  } = useContext(MyContext);
 
   useEffect(() => {
     const newData = dataLocal.filter(
@@ -15,7 +18,7 @@ export default function Table() {
   return (
     planets.map((planet, i) => (
       <tr key={ i }>
-        <td>{planet.name}</td>
+        <td data-testid="planet-name">{planet.name}</td>
         <td>{planet.rotation_period}</td>
         <td>{planet.orbital_period}</td>
         <td>{planet.diameter}</td>

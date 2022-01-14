@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Table from '../components/Table';
 import MyContext from '../context/ContextAPI';
 import FilterByNumeric from '../components/FilterByNumeric';
@@ -25,15 +25,20 @@ function renderHeaderTable() {
 
 export default function StarWars() {
   const {
+    setData,
     optionsFilter,
     setOptionsFilter,
-    filterByName,
     setFilterByName,
     filterByNumericValues,
     setFilterByNumericValues,
     dataLocal,
     setDataLocal,
     verifyComparison,
+    filterOptions,
+    orderValue,
+    setOrderValue,
+    order,
+    orderByname,
   } = useContext(MyContext);
 
   const defaultComparison = {
@@ -43,12 +48,23 @@ export default function StarWars() {
   };
   const [currencyNumericValues, setCurencyNumericValues] = useState(defaultComparison);
 
-  function onChangeFilterByName({ target }) {
-    setFilterByName({ name: target.value });
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await fetch('https://swapi-trybe.herokuapp.com/api/planets/')
+        .then((response) => response.json())
+        .then((response) => response);
+      setData(result.results);
+      setDataLocal(orderByname(orderValue, result.results));
+    };
+    fetchData();
+  }, []);
 
   function onChangeFilterByNumericValues({ target }) {
     setCurencyNumericValues({ ...currencyNumericValues, [target.name]: target.value });
+  }
+
+  function onChangeOrder({ target }) {
+    setOrderValue({ ...orderValue, [target.name]: target.value });
   }
 
   function onClick(value) {
@@ -57,12 +73,16 @@ export default function StarWars() {
     setOptionsFilter(optionsFilter.filter((option) => option !== value));
     setCurencyNumericValues({ ...defaultComparison, column: optionsFilter[1] });
   }
+
+  function sortPlanets() {
+    setDataLocal(order(orderValue, dataLocal));
+  }
   return (
     <div>
       <input
         type="text"
         data-testid="name-filter"
-        onChange={ (e) => onChangeFilterByName(e) }
+        onChange={ (e) => setFilterByName({ name: e.target.value }) }
       />
       <section>
         <select
@@ -105,12 +125,50 @@ export default function StarWars() {
         >
           Filtrar
         </button>
+        <section>
+          <select
+            data-testid="column-sort"
+            name="column"
+            onChange={ (e) => onChangeOrder(e) }
+          >
+            {
+              filterOptions.map((option) => (
+                <option
+                  key={ option }
+                  value={ option }
+                >
+                  { option }
+                </option>))
+            }
+          </select>
+          <input
+            name="sort"
+            type="radio"
+            data-testid="column-sort-input-asc"
+            value="ASC"
+            onChange={ (e) => onChangeOrder(e) }
+          />
+          <input
+            name="sort"
+            type="radio"
+            data-testid="column-sort-input-desc"
+            value="DESC"
+            onChange={ (e) => onChangeOrder(e) }
+          />
+          <button
+            type="button"
+            data-testid="column-sort-button"
+            onClick={ () => sortPlanets() }
+          >
+            Ordenar
+          </button>
+        </section>
         <FilterByNumeric />
       </section>
       <table>
         <tbody>
           {renderHeaderTable()}
-          <Table data={ dataLocal } filter={ filterByName.name } />
+          <Table />
         </tbody>
       </table>
     </div>
