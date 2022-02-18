@@ -40,13 +40,13 @@ Front-end:
 ## Instalando Dependências
 > Frontend
 ```bash
-cd src/
+cd Filtro_de_Planetas/
 npm install
 ``` 
 ## Executando aplicação
 
 * Para rodar o front-end:
   ```
-    cd src/
+    cd Filtro_de_Planetas/
     npm start
   ```
