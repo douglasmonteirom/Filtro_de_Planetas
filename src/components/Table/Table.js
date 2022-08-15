@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import MyContext from '../context/ContextAPI';
+import MyContext from '../../context/ContextAPI';
+import './Table.css';
 
 export default function Table() {
   const [planets, setPlanets] = useState([]);
@@ -17,8 +18,8 @@ export default function Table() {
 
   return (
     planets.map((planet, i) => (
-      <tr key={ i }>
-        <td data-testid="planet-name">{planet.name}</td>
+      <tr className="table-row" key={ i }>
+        <td>{planet.name}</td>
         <td>{planet.rotation_period}</td>
         <td>{planet.orbital_period}</td>
         <td>{planet.diameter}</td>

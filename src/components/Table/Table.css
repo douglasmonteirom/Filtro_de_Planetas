@@ -1,0 +1,40 @@
+.container-table
+{
+  width: 80%;
+  max-height: 400px;
+  margin: 20px auto 0px auto;
+  font-size: small;
+  overflow: auto;
+}
+
+.table-header th
+{
+    background: rgb(174, 206, 178, 0.3);
+    padding: 2px 10px;
+    border-radius: 5%;
+}
+
+.table-row td
+{
+  padding: 5px 10px;
+  border-radius: 5%;
+  box-shadow: 5px 2px 10px rgb(174, 206, 178, 0.1);
+}
+
+.container-table::-webkit-scrollbar
+{
+    width: 10px;
+    height: 10px;
+}
+
+.container-table::-webkit-scrollbar-thumb
+{
+    border-radius: 20px;
+    background:  rgb(174, 206, 178, 0.1);
+    border: solid 3px #00202a;
+}
+
+.container-table::-webkit-scrollbar-corner
+{
+    background-color: #00202a;
+}
