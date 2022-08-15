@@ -40,13 +40,13 @@ export default function FilterByNumeric() {
   }
 
   return (
-    <div>
+    <>
       {
         filters.map(({ column, comparison, value }, i) => (
-          <div key={ i } data-testid="filter">
-            <div>
+          <div className='filter-aplication' key={ i }>
+            <p>
               { `${column} ${comparison} ${value}` }
-            </div>
+            </p>
             <button
               type="button"
               onClick={ () => onClick(column) }
@@ -56,6 +56,6 @@ export default function FilterByNumeric() {
           </div>
         ))
       }
-    </div>
+    </>
   );
 }
