@@ -1,11 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
-import Table from '../components/Table';
+import Table from '../components/Table/Table';
+import './StarWars.css';
 import MyContext from '../context/ContextAPI';
 import FilterByNumeric from '../components/FilterByNumeric';
 
 function renderHeaderTable() {
   return (
-    <tr>
+    <tr className="table-header">
       <th>Nome</th>
       <th>Rotation Period</th>
       <th>Orbital Period</th>
@@ -79,55 +80,54 @@ export default function StarWars() {
   }
   return (
     <div>
-      <input
-        type="text"
-        data-testid="name-filter"
-        onChange={ (e) => setFilterByName({ name: e.target.value }) }
-      />
-      <section>
-        <select
-          data-testid="column-filter"
-          name="column"
-          value={ currencyNumericValues.column }
-          onChange={ (e) => onChangeFilterByNumericValues(e) }
-        >
-          {
-            optionsFilter.map((option) => (
-              <option
-                key={ option }
-                value={ option }
-              >
-                { option }
-              </option>))
-          }
-        </select>
-        <select
-          data-testid="comparison-filter"
-          name="comparison"
-          value={ currencyNumericValues.comparison }
-          onChange={ (e) => onChangeFilterByNumericValues(e) }
-        >
-          <option value="maior que">maior que</option>
-          <option value="menor que">menor que</option>
-          <option value="igual a">igual a</option>
-        </select>
+      <div className='container'>
+        <section className="container-filter-text">
         <input
-          type="number"
-          data-testid="value-filter"
-          name="value"
-          value={ currencyNumericValues.value }
-          onChange={ (e) => onChangeFilterByNumericValues(e) }
+          type="text"
+          placeholder="Digite o nome do planeta"
+          onChange={ (e) => setFilterByName({ name: e.target.value }) }
         />
-        <button
-          type="button"
-          data-testid="button-filter"
-          onClick={ () => onClick(currencyNumericValues.column) }
-        >
-          Filtrar
-        </button>
-        <section>
+        </section>
+        <section className="container-filter-numeric">
           <select
-            data-testid="column-sort"
+            name="column"
+            value={ currencyNumericValues.column }
+            onChange={ (e) => onChangeFilterByNumericValues(e) }
+          >
+            {
+              optionsFilter.map((option) => (
+                <option
+                  key={ option }
+                  value={ option }
+                >
+                  { option }
+                </option>))
+            }
+          </select>
+          <select
+            name="comparison"
+            value={ currencyNumericValues.comparison }
+            onChange={ (e) => onChangeFilterByNumericValues(e) }
+          >
+            <option value="maior que">maior que</option>
+            <option value="menor que">menor que</option>
+            <option value="igual a">igual a</option>
+          </select>
+          <input
+            type="number"
+            name="value"
+            value={ currencyNumericValues.value }
+            onChange={ (e) => onChangeFilterByNumericValues(e) }
+          />
+          <button
+            type="button"
+            onClick={ () => onClick(currencyNumericValues.column) }
+          >
+            Filtrar
+          </button>
+        </section>
+        <section className="container-order">
+          <select
             name="column"
             onChange={ (e) => onChangeOrder(e) }
           >
@@ -141,36 +141,45 @@ export default function StarWars() {
                 </option>))
             }
           </select>
-          <input
-            name="sort"
-            type="radio"
-            data-testid="column-sort-input-asc"
-            value="ASC"
-            onChange={ (e) => onChangeOrder(e) }
-          />
-          <input
-            name="sort"
-            type="radio"
-            data-testid="column-sort-input-desc"
-            value="DESC"
-            onChange={ (e) => onChangeOrder(e) }
-          />
+          <label className="container-radio" htmlFor="ASC">ASC
+            <input
+              id="ASC"
+              name="sort"
+              type="radio"
+              value="ASC"
+              onChange={ (e) => onChangeOrder(e) }
+            />
+            <span className="checkmark"></span>
+          </label>
+          <label className="container-radio" htmlFor="DESC">DESC
+            <input
+              id="DESC"
+              name="sort"
+              type="radio"
+              value="DESC"
+              onChange={ (e) => onChangeOrder(e) }
+            />
+            <span className="checkmark"></span>
+          </label>
           <button
             type="button"
-            data-testid="column-sort-button"
             onClick={ () => sortPlanets() }
           >
             Ordenar
           </button>
         </section>
-        <FilterByNumeric />
+        <section className="container-filter">
+          <FilterByNumeric />
+        </section>
+      </div>
+      <section className="container-table">
+        <table>
+            {renderHeaderTable()}
+          <tbody>
+            <Table />
+          </tbody>
+        </table>
       </section>
-      <table>
-        <tbody>
-          {renderHeaderTable()}
-          <Table />
-        </tbody>
-      </table>
     </div>
   );
 }
