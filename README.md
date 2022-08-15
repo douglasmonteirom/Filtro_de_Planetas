@@ -1,4 +1,6 @@
-# Filtro de Planetas API Star Wars
+# <center>Filtro de Planetas API Star Wars</center>
+
+![visualização da pagina](src/logo/print_filtro_de_planetas.png)
 
 ## Contexto
 Este projeto trata-se do desenvolvimento de uma página com alguns filtros, onde ela consome dados da API Star Wars, e renderiza os dados dos planetas.
